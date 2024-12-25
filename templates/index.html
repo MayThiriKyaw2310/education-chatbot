@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education Chatbot</title>
+    <style>
+        /* Style to make the UI larger */
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .container {
+            width: 70%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-size: 18px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 30px;
+            background-color: #eaf2f8;
+            border-radius: 4px;
+            width: 100%;
+            min-height: 100px; /* Added minimum height for better visibility */
+            font-size: 18px; /* Adjusted font size for better readability */
+            word-wrap: break-word; /* Ensure text doesn't overflow */
+            white-space: pre-wrap; /* Preserve spacing and line breaks */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ask Education-Related Questions</h1>
+
+        <form id="chatForm">
+            <label for="question">Your Question:</label>
+            <input type="text" id="question" name="question" required><br>
+
+            <label for="language">Choose Language:</label>
+            <select id="language" name="language">
+                <option value="english">English</option>
+                <option value="burmese">Burmese</option>
+            </select><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <h2>Response:</h2>
+        <p id="response"></p>
+    </div>
+
+    <script>
+        document.getElementById("chatForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var question = document.getElementById("question").value;
+            var language = document.getElementById("language").value;
+
+            fetch("/ask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ question: question, language: language })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").textContent = data.response;
+            })
+            .catch(error => {
+                document.getElementById("response").textContent = "Error: " + error;
+            });
+        });
+    </script>
+</body>
+</html>
